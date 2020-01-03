@@ -1,0 +1,510 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no" />
+    <title>sample1</title>
+    <meta descriotion="" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <style>
+      html, body{
+        padding: 0;
+        margin: 0;
+        border: 0;
+        outline: 0;
+        font-size: 100%;
+        box-sizing: border-box;
+        vertical-align: baseline;
+        background-color: transparent;
+      }
+      body{
+        line-height:1.5;
+      }
+      header{
+        padding: 1.5rem .5rem;
+        background: rgba(115, 234, 234, .85)
+      }
+      h1, h2, h3, h4, p{
+        margin: 0;
+      }
+      .container{
+        padding-top: 10px;
+        padding-bottom: 30px;
+      }
+      .service-item{
+        margin: 0 auto 20px;
+        width: 98%;
+        border: 1px solid #999;
+        border-radius: 5px;
+        box-shadow: 0px 3px 3px 3px #999;
+      }
+      .service-header, .service-box{
+        padding: 2%;
+      }
+      .serevice-logo{
+        width: 40px;
+        height: 40px;
+      }
+      .service-logo, .service-name{
+        display: inline-block;
+      }
+      .service-logo{
+        vertical-align: bottom;
+      }
+      .service-hero{
+        display:block;
+        width: 100%;
+      }
+      .service-cache{
+        color: rgba(13, 187, 187, 1.0);
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+      .tag-list{
+        margin: 0;
+        padding: 5px 0;
+      }
+      .tag-item{
+        list-style: none;
+        display:inline-block;
+        padding: 5px 10px;
+        border-radius: 5px;
+        background-color: rgba(155,234,234,1.0);
+        margin-bottom: 5px;
+      }
+      .tag-item a{
+        text-decoration: none;
+        color: #fff;
+        height: 100%;
+      }
+      .desc-title{
+        padding: .8rem .5rem;
+        background: rgba(115, 234, 234, .85);
+        margin-bottom: 6px;
+      }
+      .desc-box{
+        margin:0 auto;
+        width: 96%;
+      }
+      footer{
+        background-color: #f9f9f9;
+        padding: .3rem 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      /*検索部分*/
+      .js_target{
+        display:none;
+      }
+      .js_target.js_selected{
+        display: inline-block;
+        /*display:block;*/
+      }
+
+      .select_check label{
+        cursor: pointer;
+      }
+      .js_release{
+        cursor: pointer;
+        text-align: center;
+        color: #fff;
+        background-color: #bdbdbd;
+        padding: 15px 0;
+      }
+      /*メニュー部分*/
+      .nav-unshown {
+        display:none;
+      }
+      #nav-open {
+        display: inline-block;
+        width: 30px;
+        height: 22px;
+        vertical-align: middle;
+        position: absolute;
+        right: 18px;
+        top: 40px;
+      }
+      #nav-open span, #nav-open span:before, #nav-open span:after {
+        position: absolute;
+        height: 3px;
+        width: 25px;
+        border-radius: 3px;
+        background: #555;
+        display: block;
+        content: '';
+        cursor: pointer;
+      }
+      #nav-open span:before {
+        bottom: -8px;
+      }
+      #nav-open span:after {
+        bottom: -16px;
+      }
+      #nav-close {
+        display: none;
+        position: fixed;
+        z-index: 99;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: black;
+        opacity: 0;
+        transition: .3s ease-in-out;
+      }
+      #nav-content {
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 9999;
+        width: 90%;
+        max-width: 330px;
+        height: 100%;
+        background: #fff;
+        transition: .3s ease-in-out;
+        -webkit-transform: translateX(100%);
+        transform: translateX(100%);
+        padding-top: 90px;
+      }
+      #nav-input:checked ~ #nav-close {
+        display: block;
+        opacity: .5;
+      }
+      #nav-input:checked ~ #nav-content {
+        -webkit-transform: translateX(0%);
+        transform: translateX(0%);
+        box-shadow: 6px 0 25px rgba(0,0,0,.15);
+      }
+      #nav-list{
+        list-style: none;
+        padding: 0 30px;
+      }
+      .nav-item{
+        margin-bottom: 8px;
+      }
+      .nav-item a{
+        text-decoration: none;
+        color: #444;
+      }
+      #btn-close{
+        position: absolute;
+        right: 20px;
+        top: 18px;
+        font-size: 40px;
+        cursor: pointer;
+        color: #555;
+      }
+      #menu-title{
+        text-align: center;
+        letter-spacing: 14px;
+      }
+      /*ページトップボタン*/
+      #page-top{
+        position: fixed;
+        right: 5%;
+        bottom: 20px;
+      }
+      #page-top a{
+        display: block;
+        color: #fff;
+        background-color: rgba(155,234,234,1.0);
+        border: 1px solid rgba(155, 234, 234, 1.0);
+        border-radius: 50%;
+        text-decoration: none;
+        font-size: 18px;
+        padding: 8px 10px;
+        -moz-transition: -moz-transform 0.3s linear;
+        -webkit-transition: -webkit-transform 0.3s linear;
+        -o-transition: -o-transform 0.3s linear;
+        -ms-transition: -ms-transform 0.3s linear;
+        transition: transform 0.3s linear;
+      }
+      #page-top a:hover{
+        -webkit-transform: scale(1.4);
+    -moz-transform: scale(1.4);
+    -o-transform: scale(1.4);
+    -ms-transform: scale(1.4);
+        transform: scale(1.4);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <h1 class="header-name">Sample</h1>
+      </div>
+    </header>
+    <main>
+      <div id="nav-drawer">
+          <input id="nav-input" type="checkbox" class="nav-unshown">
+          <label id="nav-open" for="nav-input"><span></span></label>
+          <label class="nav-unshown" id="nav-close" for="nav-input"></label>
+          <div id="nav-content">
+            <label for="nav-input" id="btn-close">×</label>
+            <h3 id="menu-title">MENU</h3>
+            <ul id="nav-list">
+              <li class="nav-item">
+                <a href="#">メニュー1</a>
+              </li>
+              <li class="nav-item">
+                <a href="#">メニュー2メニュー2メニュー2メニュー2メニュー2</a>
+              </li>
+            </ul>
+          </div>
+      </div>
+      <div class="container">
+        <!--<div class="bl_3daysSearchBlock">-->
+        <div class="searchbox">
+          <!--<div class="bl_3daysSearchBlock_inner">-->
+          <div class="searchbox-inner">
+            <div class="searchbox-header">
+              <h2>LUNCH INFO</h2>
+              <p>県内のランチスポット情報</p>
+            </div>
+
+            <div id="select" class="bl_selectBlock">
+
+              <div class="search-result">
+                <!--<span class="el_searchResult_nume js_numerator"></span>件／全<span class="el_searchResult_deno js_denominator"></span>件-->
+                <span class="js_numerator"></span>件
+                <!--／全<span class="js_denominator"></span>件-->
+              </div>
+
+              <div class="select-wrapper">
+
+                <div class="select-wrapper-wrapper">
+                  <h3>ジャンル</h3>
+                  <div class="js_conditions" data-type="type">
+                    <span class="select_check"><input id="type-japan" type="radio" name="type" value="japan">
+                      <label for="type-japan">
+                      <span class="el_checkbox"></span>
+                      和食
+                      </label>
+                    </span>
+                    <span class="select_check"><input id="type-china" type="radio" name="type" value="china">
+                      <label for="type-china">
+                      <span class="el_checkbox"></span>
+                      中華
+                      </label>
+                    </span>
+                    <span class="select_check"><input id="type-italia" type="radio" name="type" value="italia">
+                      <label for="type-italia">
+                      <span class="el_checkbox"></span>
+                      イタリアン
+                      </label>
+                    </span>
+                  </div>
+                </div>
+                <div class="select-wrapper-wrapper">
+                  <h3>価格帯</h3>
+                  <div class="js_conditions" data-type="price">
+                    <span class="select_check"><input id="price-u500" type="checkbox" name="price" value="u500">
+                      <label for="price-u500">
+                        <span class="el_checkbox"></span>
+                        〜500円
+                      </label>
+                    </span>
+                    <span class="select_check"><input id="price-o500u1000" type="checkbox" name="price" value="o500u1000">
+                      <label for="price-o500u1000">
+                        <span class="el_checkbox"></span>
+                        501円〜1000円
+                      </label>
+                    </span>
+                    <span class="select_check"><input id="price-o1000" type="checkbox" name="price" value="o1000">
+                      <label for="price-o1000">
+                        <span class="el_checkbox"></span>
+                        1000円〜
+                      </label>
+                    </span>
+                  </div>
+                </div>
+                <div class="select-wrapper-wrapper">
+                  <h3>場所</h3>
+                  <div class="js_conditions" data-type="location">
+                    <span class="select_check"><input id="location-kanazawa" type="checkbox" name="location" value="kanazawa">
+                      <label for="location-kanazawa">
+                        <span class="el_checkbox"></span>
+                        金沢
+                      </label>
+                    </span>
+                    <span class="select_check"><input id="location-kaga" type="checkbox" name="location" value="kaga">
+                      <label for="location-kaga">
+                        <span class="el_checkbox"></span>
+                        加賀
+                      </label>
+                    </span>
+                    <span class="select_check"><input id="location-komatsu" type="checkbox" name="location" value="komatsu">
+                      <label for="location-komatsu">
+                        <span class="el_checkbox"></span>
+                        小松
+                      </label>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="js_release">すべての選択を解除</div>
+            </div>
+
+            <div class="searchresult-list">
+              <div class="result-item js_target" data-type="japan" data-price="u500" data-location="kanazawa"><img src="./img/flower.jpeg"></div>
+              <div class="result-item js_target" data-type="china" data-price="u500" data-location="kanazawa"><img src="./img/flower.jpeg"></div>
+              <div class="result-item js_target" data-type="italia" data-price="u500" data-location="kanazawa"><img src="./img/flower.jpeg"></div>
+              <div class="result-item js_target" data-type="japan" data-price="o500u1000" data-location="kanazawa"><img src="./img/flower.jpeg"></div>
+              <div class="result-item js_target" data-type="china" data-price="o500u1000" data-location="kanazawa"><img src="./img/flower.jpeg"></div>
+              <div class="result-item js_target" data-type="italia" data-price="o500u1000" data-location="kanazawa"><img src="./img/flower.jpeg"></div>
+              <div class="result-item js_target" data-type="japan" data-price="u500" data-location="kaga" ><img src="./img/flower.jpeg"></div>
+              <div class="result-item js_target" data-type="china" data-price="u500" data-location="komatsu"><img src="./img/flower.jpeg"></div>
+              <div class="result-item js_target" data-type="italia" data-price="u500" data-location="komatsu"><img src="./img/flower.jpeg"></div>
+              <div class="result-item js_target" data-type="japan" data-price="o1000" data-location="kanazawa"><img src="./img/flower.jpeg"></div>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="service-list">
+          <h2 class="desc-title">サービス一覧</h2>
+          <div class="service-item">
+            <div class="service-header">
+              <img src="./img/flower.jpeg" alt="service-name" class="service-logo"/>
+              <h3 class="service-name">サービス1</h3>
+            </div>
+              <img src="./img/hero.jpeg" alt="servive-name" class="service-hero" />
+            <div class="service-box">
+              <h4 class="service-cache">サンプル</h4>
+              <ul class="tag-list">
+                <li class="tag-item"><a href="#" class="tag-1">tag1</a></li>
+                <li class="tag-item"><a href="#" class="tag-2">tag2</a></li>
+                <li class="tag-item"><a href="#" class="tag-3">tag3</a></li>
+                <li class="tag-item"><a href="#" class="tag-4">tag4</a></li>
+                <li class="tag-item"><a href="#" class="tag-5">tag5</a></li>
+                <li class="tag-item"><a href="#" class="tag-6">tag6</a></li>
+                <li class="tag-item"><a href="#" class="tag-7">tag7</a></li>
+                <li class="tag-item"><a href="#" class="tag-8">tag8</a></li>
+                <li class="tag-item"><a href="#" class="tag-9">tag9</a></li>
+              </ul>
+              <p>
+                サンプルサンプル
+              </p>
+            </div>
+          </div>
+          <div class="service-item">
+            <div class="service-header">
+              <img src="./img/flower.jpeg" alt="service-name" class="service-logo"/>
+              <h3 class="service-name">サービス2</h3>
+            </div>
+              <img src="./img/hero.jpeg" alt="servive-name" class="service-hero" />
+            <div class="service-box">
+              <h4 class="service-cache">サンプル</h4>
+              <p>
+                サンプルサンプル
+              </p>
+            </div>
+          </div>
+          <div class="service-item">
+            <div class="service-header">
+              <img src="./img/flower.jpeg" alt="service-name" class="service-logo"/>
+              <h3 class="service-name">サービス3</h3>
+            </div>
+              <img src="./img/hero.jpeg" alt="servive-name" class="service-hero" />
+            <div class="service-box">
+              <h4 class="service-cache">サンプル</h4>
+              <p>
+                サンプルサンプル
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="service-desc">
+          <h2 class="desc-title">サービスの紹介</h2>
+          <div class="desc-box">
+            <p>
+              このサービスは・・・・
+            </p>
+          </div>
+        </div>
+        <div id="page-top">
+          <a href="#">⬆︎</a>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="footer-inner">
+        &copy; 2020 Sample
+      </div>
+    </footer>
+  </body>
+</html>
+<script>
+$(function(){
+  var box = $('.js_target');
+  var conditions = $('.js_conditions');
+  var findConditions;
+  var currentType;
+  var count = 0;
+  var checkcount = 0;
+  var data_check = 0;
+
+  var condition ={};
+
+  $('.js_denominator').text(box.length);
+
+  for(var i = 0; i < conditions.length; i++){
+    currentType = conditions[i].getAttribute('data-type');
+    condition[currentType] = [];
+  }
+
+  function setConditions(){
+    count = 0;
+    box.removeClass('js_selected');
+    for(var i = 0; i < conditions.length; i++){
+      currentType = conditions[i].getAttribute('data-type');
+      findConditions = conditions[i].querySelectorAll('input');
+      for(var n = 0; n< findConditions.length; n++){
+        if(findConditions[n].checked){
+          condition[currentType][findConditions[n].value] = true;
+          checkcount++
+        } else {
+          condition[currentType][findConditions[n].value] = false;
+        }
+        if(findConditions.length === n+1){
+          if(checkcount === 0){
+            for(var t = 0; t < findConditions.length; t++){
+              condition[currentType][findConditions[t].value] = true;
+            }
+          }
+          checkcount = 0;
+        }
+      }
+    }
+
+
+    for(var m = 0, len = box.length; m< len; ++m){
+      for(var i = 0; i < conditions.length; i++){
+        currentType = conditions[i].getAttribute('data-type');
+        if(condition[currentType][$(box[m]).data(currentType)]){
+          data_check++;
+        } else {
+        }
+      }
+        if(data_check === conditions.length){
+          count++;
+          $(box[m]).addClass('js_selected');
+        }else{
+        }
+        data_check = 0;
+    }
+    $('.js_numerator').text(count);
+  }
+
+  setConditions();
+  $(document).on('click','input',function(){
+    setConditions();
+  });
+
+  $(document).on('click','.js_release',function(){
+    $('.select_check input').prop("checked", false);
+    setConditions();
+  });
+});
+</script>
